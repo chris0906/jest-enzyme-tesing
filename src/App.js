@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import Header from "./components/header";
 import Headline from "./components/headline";
 import SharedButton from "./components/button";
@@ -17,37 +17,56 @@ const tempArr = [
   }
 ];
 
-function App({ fetchPosts, posts }) {
-  const configButton = {
-    buttonText: "Get posts",
-    emitEvent: fetchPosts
+class App extends Component {
+  state = {
+    hideBtn: false
+  };
+  exampleMethod_updatesState = () => {
+    const { hideBtn } = this.state;
+    this.setState({ hideBtn: !hideBtn });
   };
 
-  return (
-    <div className="App" data-test="appComponent">
-      <Header />
-      <div className="main">
-        <Headline
-          tempArr={tempArr}
-          header="Posts"
-          desc="Click the button to render the posts!"
-        />
-        <SharedButton {...configButton} />
-        {posts.length > 0 && (
-          <div>
-            {posts.map((post, index) => {
-              const { title, body } = post;
-              const configListItem = {
-                title,
-                desc: body
-              };
-              return <ListItem key={index} {...configListItem} />;
-            })}
-          </div>
-        )}
+  exampleMethod_returnAValue = number => {
+    return number + 1;
+  };
+
+  fetch = () => {
+    this.props.fetchPosts();
+    this.exampleMethod_updatesState();
+  };
+
+  render() {
+    const { posts } = this.props;
+    const configButton = {
+      buttonText: "Get posts",
+      emitEvent: this.fetch
+    };
+    return (
+      <div className="App" data-test="appComponent">
+        <Header />
+        <div className="main">
+          <Headline
+            tempArr={tempArr}
+            header="Posts"
+            desc="Click the button to render the posts!"
+          />
+          {!this.state.hideBtn && <SharedButton {...configButton} />}
+          {posts.length > 0 && (
+            <div>
+              {posts.map((post, index) => {
+                const { title, body } = post;
+                const configListItem = {
+                  title,
+                  desc: body
+                };
+                return <ListItem key={index} {...configListItem} />;
+              })}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 const mapStateToProps = state => {
