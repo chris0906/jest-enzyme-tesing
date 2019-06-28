@@ -24,7 +24,7 @@ function App({ fetchPosts, posts }) {
   };
 
   return (
-    <div className="App">
+    <div className="App" data-test="appComponent">
       <Header />
       <div className="main">
         <Headline
